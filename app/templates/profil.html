@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+    <div>
+        {% include 'flash.html' %}
+        <h1>Hallo {{ username }}</h1>
+        <form action="{{ url_for('profil_user')}}" method="POST">
+            <label for='judul'>Apa masakan mu</label>
+            <input type='text' name='judul' id='judul' placeholder="Nama masakan mu"/>
+            <label for='file'>File</label>
+            <input type='file' name='file' id='file' accept=".jpg, .jpeg, .png" placeholder="Masukkan foto masakan anda"/>
+            <button type='submit'>Menuju ke bahan</button>
+        </form>
+    </div>
+{% endblock %}

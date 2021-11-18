@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+{% block content %}
+    <script>
+         $(document).ready(function() {
+            var pesan = $('#msg');
+            $(pesan).hide();
+            $("#sub-registry").click(function() {
+                var username = $("#username").val();
+                var password = $("#password").val();
+                var gender = $("#email").val();
+                if(username != "" && password != "" && email != ''){
+           			if(password.length < 8){
+                            $(pesan).show()
+                            $(pesan).html("<span style='color:red;'>Password harus 8 karakter</span>")
+                            return false
+                       }
+                }else{
+                    $(pesan).show()
+                    $(pesan).html("<span style='color:red;'>Lengkapi form</span>")
+                }
+            });
+        });
+    </script>
+    <div>
+        {% include 'flash.html' %}
+        <form action="{{ url_for('registrasi_user') }}" method="POST">
+            <label for='username'>Username</label>
+            <input type='text' name='username' id='username' placeholder="Username harus unik" required/>
+            <label for='email'>Email</label>
+            <input type='email' name='email' id='email' placeholder="Email dibutuhkan" required/>
+            <label for='password'>Password</label>
+            <input type='password' name='password' id='password' placeholder="Password dibutuhkan 8 karakter" required/>
+            <div id='msg'></div>
+            <button type='submit' id='sub-registry'>Submit</button>
+        </form>
+    </div>
+{% endblock %}

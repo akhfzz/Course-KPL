@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Postingan{% endblock %}
+{% block content %}
+    {% if error %}
+        {{error}}
+    {% endif %}
+    {% if data|length > 1 %}
+            <ul>
+                {% for dt in data %}
+                    <li>{{ dt.judul}}</li>
+                    <li>{{dt.waktu}}</li>
+                {% endfor %}
+            </ul>
+    {% endif %}
+{% endblock %}

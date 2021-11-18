@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+    <script>
+        $(document).ready(function(){
+            $('#more_bahan').hide()
+            $("#more").click(function(){
+                $("#more_bahan").show()
+            });
+        });
+    </script>
+    <div>
+        {% include 'flash.html' %}
+        <a href="/login/profil">Back</a>
+        <h1>Bahan dari {{ bahan }}</h1>
+        <form method="POST" action="{{ url_for('bahan_masakan') }}">
+            <label for=jumlah_bahan>Jumlah bahan tertentu</label><br/>
+            <input type='radio' name='jumlah_bahan' id='jumlah_bahan1' value='1'>1<br/>
+            <input type='radio' name='jumlah_bahan' id='jumlah_bahan2' value='2'/>2<br/>
+            <input type='radio' name='jumlah_bahan' id='jumlah_bahan3' value='3'/>3<br/>
+            <input type='radio' id='more' value='lainnya'/>lainnya<br/>
+            <input type='text' name='jumlah_bahan' id='more_bahan' placeholder="Masukkan jumlah bahan mu"/>
+            <input type='text' name='satuan' id='satuan' placeholder="Satuan jumlah bahan"/>
+            <input type='text' name='bahan' id='bahan' placeholder="Bahan apakah itu?"/>
+            <button type='submit'>Input bahan</button>
+        </form>
+    </div>
+    <div>
+        <h1>{{bahan}}</h1>
+        {% for i in bahan_mentah %}
+        <ul>
+            <li>
+                {{i.jumlah_bahan}} {{i.satuan}}
+            </li>
+            <li>
+                {{i.bahan}}
+            </li>
+        </ul>
+        {% endfor %}
+
+    </div>
+{% endblock %}

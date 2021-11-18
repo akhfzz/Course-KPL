@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+{% block content %}
+    <div>
+        {% include 'flash.html' %}
+        <form action="{{ url_for('login_user') }}" method="POST">
+            <label for='username'>Username</label>
+            <input type='text' name='username' id='username' placeholder="Username yang terdaftar"/>
+            <label for='password'>Password</label>
+            <input type='password' name='password' id='password' placeholder="Password yang terdaftar" required/>
+            <button type='submit'>Submit</button>
+        </form>
+    </div>
+{% endblock %}
