@@ -1,15 +1,25 @@
 {% extends 'base.html' %}
 {% block title %}Postingan{% endblock %}
 {% block content %}
-    {% if error %}
-        {{error}}
-    {% endif %}
+    {% include 'flash.html' %}  
     {% if data|length > 1 %}
             <ul>
                 {% for dt in data %}
                     <li>{{ dt.judul}}</li>
                     <li>{{dt.waktu}}</li>
                 {% endfor %}
+            </ul>
+    {%else %}
+            <ul>
+                {%for i in range(data|length)%}
+                    <li>{{ data[i].judul }}</li>
+                    <li>{{ data[i].waktu }}</li>
+                    <li>
+                        <form action="{{url_for('hapus_resep', id=data[i].id)}}" method="POST">
+                            <button type="submit">Hapus</button>
+                        </form>
+                    </li>
+                {%endfor%}
             </ul>
     {% endif %}
 {% endblock %}

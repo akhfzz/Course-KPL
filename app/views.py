@@ -98,7 +98,15 @@ def postingan_user():
     data = ControlDB()
     mysql = data.postingan_get(session['username'])
     if mysql is None:
-        return render_template('postingan.html', error='Kamu belum memposting apapun')
+        flash('Kamu belum memposting', 'warning')
+        return render_template('postingan.html')
     return render_template('postingan.html', data=mysql)
+
+@app.route('/login/postingan/<id>', methods=['POST', 'GET'])
+def hapus_resep(id:int):
+    data = Postingan.query.filter_by(id=id).first()
+    db.session.delete(data)
+    db.session.commit()
+    return redirect(url_for('postingan_user'))
 
 

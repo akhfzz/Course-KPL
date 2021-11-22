@@ -23,7 +23,7 @@ class ControlDB:
         global db, cursor 
         self.connecting()
         cursor.execute(f"""
-            SELECT p.judul, p.wkt_posting as waktu
+            SELECT p.id, p.judul, p.wkt_posting as waktu
             FROM postingan p, user u
             WHERE u.id=p.id_user AND u.username = '{username}'
         """)
