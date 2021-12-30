@@ -12,8 +12,8 @@
         });
     </script>
     <div>
+        {% include 'navbar.html' %}
         {% include 'flash.html' %}
-        <a href="/login/profil">Back</a>
         <h1>Bahan dari {{ bahan }}</h1>
         <form method="POST" action="{{ url_for('bahan_masakan') }}">
             <label for=jumlah_bahan>Jumlah bahan tertentu</label><br/>

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Detail Postingan{% endblock %}
+{% block content %}  
+    {% include 'navbar.html' %}
+    {% if data%}
+        <ul>
+            {% for i in data %}
+                <li>{{ i.bahan }} {{ i.jumlah_bahan }}{{i.satuan}}</li>
+                <li>
+                    <img src="{{i.file}}">
+                </li>
+            {% endfor %}
+        </ul>
+    {%else %}
+            <h2>Belum posting apapun</h2>
+    {% endif %}
+{% endblock %}

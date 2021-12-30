@@ -29,3 +29,19 @@ class ControlDB:
         """)
         fetch = cursor.fetchall()
         return fetch
+
+    def postingan_detail(self, id):
+        global db, cursor
+        self.connecting()
+        cursor.execute(
+            f"""
+                SELECT
+                    p.file, p.judul, p.wkt_posting, r.jumlah_bahan, r.satuan, r.bahan
+                FROM 
+                    postingan p, resep r
+                WHERE 
+                    p.id = r.id_postingan AND p.id = {id}
+            """
+        )
+        fetch = cursor.fetchall()
+        return fetch

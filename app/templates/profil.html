@@ -4,6 +4,7 @@
 
 {% block content %}
     <div>
+        {% include 'navbar.html' %}
         {% include 'flash.html' %}
         <h1>Hallo {{ username }}</h1>
         <form action="{{ url_for('profil_user')}}" method="POST">

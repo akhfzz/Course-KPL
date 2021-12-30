@@ -109,4 +109,16 @@ def hapus_resep(id:int):
     db.session.commit()
     return redirect(url_for('postingan_user'))
 
+@app.route('/login/postingan/detail/<int:id>')
+def detail_postingan(id):
+    data = ControlDB()
+    mysql = data.postingan_detail(id)
+    return render_template('detail.html', data=mysql)
+
+@app.route('/logout')
+def logout():
+    session.pop('username',None)
+    return redirect(url_for('login_user'))
+
+
 
