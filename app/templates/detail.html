@@ -3,14 +3,16 @@
 {% block content %}  
     {% include 'navbar.html' %}
     {% if data%}
-        <ul>
-            {% for i in data %}
-                <li>{{ i.bahan }} {{ i.jumlah_bahan }}{{i.satuan}}</li>
-                <li>
-                    <img src="{{i.file}}">
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="text-center">
+            <img src="{{url_for('static', filename='uploads/'+gambar.file)}}" style="height: 25rem; width: 20rem;" alt="{{ gambar.judul }}">
+        </div>
+        <div style="margin-top: 2em;" class="container">
+            <ol class="list-group list-group-numbered">
+                {% for i in data %}
+                    <li  class="list-group-item">{{ i.bahan }} {{ i.jumlah_bahan }} {{i.satuan}}</li>
+                {% endfor %}
+            </ol>
+        </div>
     {%else %}
             <h2>Belum posting apapun</h2>
     {% endif %}

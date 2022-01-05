@@ -23,9 +23,12 @@ class ControlDB:
         global db, cursor 
         self.connecting()
         cursor.execute(f"""
-            SELECT p.id, p.judul, p.wkt_posting as waktu
-            FROM postingan p, user u
-            WHERE u.id=p.id_user AND u.username = '{username}'
+            SELECT
+                p.id, p.judul, p.wkt_posting as waktu, p.file
+            FROM 
+                postingan p, user u
+            WHERE 
+                u.id=p.id_user AND u.username = '{username}'
         """)
         fetch = cursor.fetchall()
         return fetch
@@ -36,7 +39,7 @@ class ControlDB:
         cursor.execute(
             f"""
                 SELECT
-                    p.file, p.judul, p.wkt_posting, r.jumlah_bahan, r.satuan, r.bahan
+                    p.judul, p.wkt_posting, r.jumlah_bahan, r.satuan, r.bahan
                 FROM 
                     postingan p, resep r
                 WHERE 
@@ -44,4 +47,20 @@ class ControlDB:
             """
         )
         fetch = cursor.fetchall()
+        return fetch
+
+    def pict(self, id):
+        global db, cursor 
+        self.connecting()
+        cursor.execute(
+            f"""
+                SELECT
+                    p.file, p.judul
+                FROM 
+                    postingan p, resep r
+                WHERE 
+                    p.id = r.id_postingan AND p.id = {id}
+            """
+        )
+        fetch = cursor.fetchone()
         return fetch

@@ -8,7 +8,7 @@
         {% include 'flash.html' %}
         <div style="display: flex; flex-wrap: wrap; justify-content: center;">
             <div style="margin-top: 10em; flex-basis: 50em;">
-                <form action="{{ url_for('profil_user')}}" method="POST">
+                <form action="{{ url_for('profil_user')}}" method="POST" enctype = "multipart/form-data">
                     <h4>Mau masak apa hari ini ?</h4>
                     <div class="mb-3">
                         <label for='judul' class="form-label">Nama Masakan</label>

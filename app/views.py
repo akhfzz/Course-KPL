@@ -6,6 +6,7 @@ from app.controls import ControlDB
 from app.models import db, User, Postingan, Penyimpanan, Penyuka, Komentar, Pertemanan, Resep
 from passlib.hash import sha256_crypt
 from flask import render_template, request, redirect, flash, url_for, session
+from werkzeug.utils import secure_filename
 
 #pendaftaran user
 @app.route('/registrasi', methods=['GET', 'POST'])
@@ -56,7 +57,7 @@ def login_user():
 def profil_user():
     if request.method == 'POST':
         judul = request.form['judul']
-        file = request.form['file'].encode()
+        file = request.files['file']
         
         session['bahan'] = judul
 
@@ -66,7 +67,9 @@ def profil_user():
             return render_template('profil.html')
         
         foreign_user = User.query.filter_by(username=session['username']).first()
-        input = Postingan(judul=judul, file=file, postingan=foreign_user)
+        directory = app.config['UPLOAD_FOLDER'] + '/' + secure_filename(file.filename)
+        file.save(directory)
+        input = Postingan(judul=judul, file=secure_filename(file.filename), postingan=foreign_user)
         db.session.add(input)
         db.session.commit()
         return redirect(url_for('bahan_masakan'))
@@ -90,7 +93,7 @@ def bahan_masakan():
         db.session.commit()
         # return redirect(url_for('profil_user', username))
         resep_ku = Resep.query.filter_by(resep=postingan).all()
-        return render_template('bahan.html', bahan_mentah=resep_ku)
+        return render_template('bahan.html', bahan_mentah=resep_ku, x=0)
     return render_template('bahan.html', username=session['username'], bahan=session['bahan'])
 
 @app.route('/login/postingan')
@@ -113,7 +116,8 @@ def hapus_resep(id:int):
 def detail_postingan(id):
     data = ControlDB()
     mysql = data.postingan_detail(id)
-    return render_template('detail.html', data=mysql)
+    pict = data.pict(id)
+    return render_template('detail.html', data=mysql, gambar=pict)
 
 @app.route('/logout')
 def logout():

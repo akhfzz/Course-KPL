@@ -3,24 +3,28 @@
 {% block content %}
     {% include 'navbar.html' %}
     {% include 'flash.html' %}  
-    {% if data|length > 1 %}
-            <ul>
-                {% for dt in data %}
-                    <li><a href="{{ url_for('detail_postingan', id=dt.id) }}">{{ dt.judul}}</a></li>
-                    <li>{{dt.waktu}}</li>
-                {% endfor %}
-            </ul>
+    {% if data|length < 1 %}
+        <div class="text-center">
+            <h4>Belum Posting Apapun</h4>
+        </div>
     {%else %}
-            <ul>
-                {%for i in range(data|length)%}
-                    <li><a href="{{ url_for('detail_postingan', id=data[i].id) }}">{{ data[i].judul}}</a></li>
-                    <li>{{ data[i].waktu }}</li>
-                    <li>
-                        <form action="{{url_for('hapus_resep', id=data[i].id)}}" method="POST">
-                            <button type="submit">Hapus</button>
-                        </form>
-                    </li>
-                {%endfor%}
-            </ul>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                <div style="flex-basis: 40em;">
+                    {%for i in range(data|length)%}
+                        <div class="border border-1" style="padding: 1.3em;">
+                            <img src="{{url_for('static', filename='uploads/'+ data[i].file)}}" style="height: 25rem; width: 20rem;" alt="{{ data[i].judul }}">
+                            <h4 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                                <a href="{{ url_for('detail_postingan', id=data[i].id) }}" style="text-decoration: none; text-transform: capitalize;">
+                                    {{ data[i].judul}}
+                                </a>
+                            </h4>
+                            {{ data[i].waktu }}
+                                <form action="{{url_for('hapus_resep', id=data[i].id)}}" method="POST">
+                                    <button type="submit">Hapus</button>
+                                </form>
+                        </div>
+                    {%endfor%}
+                </div>
+            </div>
     {% endif %}
 {% endblock %}

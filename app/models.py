@@ -3,7 +3,7 @@ sys.path.append('..')
 
 from config import db 
 from datetime import *
-from sqlalchemy.dialects.mysql import MEDIUMBLOB
+# from sqlalchemy.dialects.mysql import MEDIUMBLOB
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -45,7 +45,7 @@ class Komentar(db.Model):
 class Postingan(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_user = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
-    file = db.Column(MEDIUMBLOB, nullable=False)
+    file = db.Column(db.String(255), nullable=False)
     judul = db.Column(db.String(150), nullable=False, unique=True)
     wkt_posting = db.Column(db.Date, default=datetime.today())
     #foreign key akses
