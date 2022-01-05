@@ -6,7 +6,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
+          {% if username %}
+            <a href='/login/profil' class="nav-link">{{ username }}</a>
+          {% else %}
             <a href='/login/profil' class="nav-link">Profil</a>
+          {% endif %}
         </div>
         <div class="navbar-nav">
             <a href='/login/postingan' class="nav-link">Postingan</a>

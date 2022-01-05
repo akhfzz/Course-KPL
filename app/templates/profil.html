@@ -6,13 +6,21 @@
     <div>
         {% include 'navbar.html' %}
         {% include 'flash.html' %}
-        <h1>Hallo {{ username }}</h1>
-        <form action="{{ url_for('profil_user')}}" method="POST">
-            <label for='judul'>Apa masakan mu</label>
-            <input type='text' name='judul' id='judul' placeholder="Nama masakan mu"/>
-            <label for='file'>File</label>
-            <input type='file' name='file' id='file' accept=".jpg, .jpeg, .png" placeholder="Masukkan foto masakan anda"/>
-            <button type='submit'>Menuju ke bahan</button>
-        </form>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+            <div style="margin-top: 10em; flex-basis: 50em;">
+                <form action="{{ url_for('profil_user')}}" method="POST">
+                    <h4>Mau masak apa hari ini ?</h4>
+                    <div class="mb-3">
+                        <label for='judul' class="form-label">Nama Masakan</label>
+                        <input type='text' name='judul' id='judul' class="form-control" placeholder="Nama masakan mu"/>
+                      </div>
+                    <div class="mb-3">
+                        <label for='file' class="form-label">File</label>
+                        <input type='file' name='file' id='file' accept=".jpg, .jpeg, .png" placeholder="Masukkan foto masakan anda"  class="form-control form-control-sm" id="formFileSm"/>
+                      </div>
+                      <button type="submit" class="btn btn-light">Tahap berikutnya</button>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}

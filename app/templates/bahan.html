@@ -3,32 +3,33 @@
 {% block title %}Profil{% endblock %}
 
 {% block content %}
-    <script>
-        $(document).ready(function(){
-            $('#more_bahan').hide()
-            $("#more").click(function(){
-                $("#more_bahan").show()
-            });
-        });
-    </script>
     <div>
         {% include 'navbar.html' %}
         {% include 'flash.html' %}
-        <h1>Bahan dari {{ bahan }}</h1>
-        <form method="POST" action="{{ url_for('bahan_masakan') }}">
-            <label for=jumlah_bahan>Jumlah bahan tertentu</label><br/>
-            <input type='radio' name='jumlah_bahan' id='jumlah_bahan1' value='1'>1<br/>
-            <input type='radio' name='jumlah_bahan' id='jumlah_bahan2' value='2'/>2<br/>
-            <input type='radio' name='jumlah_bahan' id='jumlah_bahan3' value='3'/>3<br/>
-            <input type='radio' id='more' value='lainnya'/>lainnya<br/>
-            <input type='text' name='jumlah_bahan' id='more_bahan' placeholder="Masukkan jumlah bahan mu"/>
-            <input type='text' name='satuan' id='satuan' placeholder="Satuan jumlah bahan"/>
-            <input type='text' name='bahan' id='bahan' placeholder="Bahan apakah itu?"/>
-            <button type='submit'>Input bahan</button>
-        </form>
+        <div class="container">
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 5em;">
+                <form method="POST" action="{{ url_for('bahan_masakan') }}">
+                    {% include 'flash.html' %}
+                    <h1>Bahan dari {{ bahan }}</h1>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">SUM</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name='jumlah_bahan' placeholder="Jumlah bahan">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">UNIT</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="satuan" placeholder="Satuan bahan">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">OBJ</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="bahan" placeholder="Apakah bahan itu">
+                     </div>
+                     <button type="submit" class="btn btn-outline-secondary">Masukkan bahan</button>
+                </form>
+            </div>
+        </div>
     </div>
+        </div>
     <div>
-        <h1>{{bahan}}</h1>
         {% for i in bahan_mentah %}
         <ul>
             <li>
