@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Global{% endblock %}
+{% block content %}
+    {% include 'navbar.html' %}
+    {% if data %}
+        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+            <div style="flex-basis: 40em;">
+                <!-- {{data}} -->
+                {% for i in range(data|length) %}
+                    <div class="border border-1">
+                        <img class="text-center" src="{{url_for('static', filename='uploads/'+ data[i].file)}}" style="height: 25rem; width: 100%;" alt="{{ data[i].judul }}">
+                        <h4 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                            <a href="#" style="text-decoration: none; text-transform: capitalize;">
+                                {{ data[i].judul}}
+                            </a>
+                        </h4>
+                        <p>{{ data[i].username}}</p>
+                        <span>{{ data[i].waktu }}</span><br/>
+                        <div class="text-center">
+                            <div class="btn-group" role="group" aria-label="Basic mixed styles example" style="width: 50%;">
+                                <form method="POST" action="{{ url_for('penyuka', usrid=data[i].user_id, postid=data[i].postingan_id) }}">
+                                    {% if penyuka.id_postingan == data[i].postingan_id %}
+                                        <button type="submit" class="btn btn-light">
+                                            <img src="https://img.icons8.com/material-sharp/24/000000/dislike.png"/>
+                                        </button>
+                                    {%else%}
+                                        <button type="submit" class="btn btn-light">
+                                            <img src="https://img.icons8.com/ios-glyphs/30/000000/facebook-like--v1.png"/>
+                                        </button>
+                                    {% endif %}
+                                </form>
+                                <button type="button" class="btn btn-dark" id='comment'>Komentar</button>
+                            </div>
+                        </div>
+                        <div id="demo">
+                            <form method="POST" action="{{url_for('komentar', usrid=data[i].user_id, postid=data[i].postingan_id)}}">
+                                <div class="input-group">
+                                    <textarea name='comment_post' id="comment_post" class="form-control"></textarea>
+                                    <button type="submit" class="input-group-text">Kirim</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+                {{day}}
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <h3>Data belum tersedia</h3>
+        </div>
+    {%endif %}
+    <script type="text/javascript">
+        $("#demo").hide();
+        $(document).ready(function(){
+            $("#comment").click(function(){
+                $("#demo").toggle()
+            })
+        })
+    </script>
+{% endblock %}
