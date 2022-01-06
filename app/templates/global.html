@@ -5,12 +5,11 @@
     {% if data %}
         <div style="display: flex; flex-wrap: wrap; justify-content: center;">
             <div style="flex-basis: 40em;">
-                <!-- {{data}} -->
                 {% for i in range(data|length) %}
                     <div class="border border-1">
                         <img class="text-center" src="{{url_for('static', filename='uploads/'+ data[i].file)}}" style="height: 25rem; width: 100%;" alt="{{ data[i].judul }}">
                         <h4 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                            <a href="#" style="text-decoration: none; text-transform: capitalize;">
+                            <a href="{{ url_for('detail_postingan', id=data[i].postingan_id) }}" style="text-decoration: none; text-transform: capitalize;">
                                 {{ data[i].judul}}
                             </a>
                         </h4>
@@ -30,6 +29,15 @@
                                     {% endif %}
                                 </form>
                                 <button type="button" class="btn btn-dark" id='comment'>Komentar</button>
+                                {% if data[i].user_id != user.id %}
+                                    <form action="{{ url_for('mengikuti', userid=user.id, followid=data[i].user_id)}}" method="POST">
+                                        {% if following %}
+                                            <button type="submit" class="btn btn-light">Unfollow</button>
+                                        {% else %}
+                                            <button type="submit" class="btn btn-light">Follow</button>
+                                        {% endif %}
+                                    </form>
+                                {% endif %}
                             </div>
                         </div>
                         <div id="demo">
@@ -42,7 +50,6 @@
                         </div>
                     </div>
                 {% endfor %}
-                {{day}}
             </div>
         </div>
     {% else %}

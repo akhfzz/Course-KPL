@@ -42,7 +42,7 @@ class ControlDB:
         cursor.execute(
             f"""
                 SELECT
-                    p.judul, p.wkt_posting, r.jumlah_bahan, r.satuan, r.bahan
+                    p.id_user, p.judul, p.wkt_posting, r.jumlah_bahan, r.satuan, r.bahan
                 FROM 
                     postingan p, resep r
                 WHERE 
@@ -267,11 +267,12 @@ class ControlDB:
         cursor.execute(
             f"""
                 SELECT
-                    u.username, k.comment_post as komentar, k.tgl_comment
+                    u.id, u.username, k.comment_post as komentar, k.tgl_comment
                 FROM 
                     user u, komentar k 
                 WHERE 
                     u.id=k.id_user AND k.id_postingan='{id}' 
+                ORDER BY k.tgl_comment DESC
             """
         )
         return cursor.fetchall()
@@ -286,3 +287,64 @@ class ControlDB:
         )
         db.commit()
         self.close()
+    
+    def follow(self, data):
+        global db, cursor 
+        self.connecting()
+        cursor.execute(
+            f"""
+                INSERT INTO pertemanan (
+                    follows, following, tanggal
+                )VALUES(
+                    '{data[0]}', '{data[1]}', '{data[2]}'
+                )
+            """
+        )
+        db.commit()
+        self.close()
+    
+    def select_following(self, id):
+        global db, cursor 
+        self.connecting()
+        cursor.execute(
+            f"""
+                SELECT * FROM pertemanan WHERE following='{id}'
+            """
+        )
+        return cursor.fetchone()
+    
+    def select_follows(self, id):
+        global db, cursor 
+        self.connecting()
+        cursor.execute(
+            f"""
+                SELECT * FROM pertemanan WHERE follows='{id}'
+            """
+        )
+        return cursor.fetchone()
+    
+    def hapus_pertemanan(self, follows, following):
+        global db, cursor 
+        self.connecting()
+        cursor.execute(
+            f"""
+                DELETE FROM pertemanan WHERE following='{following}' and follows='{follows}'
+            """
+        )
+        db.commit()
+        self.close()
+    
+    def count_following(self, id):
+        global db, cursor
+        self.connecting()
+        cursor.execute(
+            f"""
+                SELECT 
+                    count(follows) as follower, following
+                FROM 
+                    pertemanan
+                WHERE
+                    following='{id}' GROUP BY following
+            """
+        )
+        return cursor.fetchone()

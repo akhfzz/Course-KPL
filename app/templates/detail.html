@@ -22,7 +22,7 @@
                     <div class="text-center">
                         Tampilkan komentar
                     </div>
-                  </button>
+                </button>
                 <div id='click'>
                     {% if field %}
                         {% for i in field %}
@@ -36,13 +36,21 @@
                                     {% endif %}
                                 </div>
                                 <p class="mb-1">{{ i.komentar }}</p>
-                                <small class="text-muted">
-                                    <form action="" method="POST">
-                                        <button class='btn btn-light' type="submit" style="border: none;">
-                                            Follow
-                                        </button>
-                                    </form>
-                                </small>
+                                {% if i.id !=  user.id %}
+                                    <small class="text-muted">
+                                        <form action="{{ url_for('mengikuti', userid=user.id, followid=i.id)}}" method="POST">
+                                            {% if follow %}
+                                                <button class='btn btn-light' type="submit" style="border: none;">
+                                                    follow
+                                                </button>
+                                            {% else %}
+                                                <button class="btn btn-light" type="submit" style="border: none;">
+                                                    unfollow
+                                                </button>
+                                            {% endif %}
+                                        </form>
+                                    </small>
+                                {% endif %}
                             </a>
                         {% endfor %}
                     {% else %}

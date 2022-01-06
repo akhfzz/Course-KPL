@@ -58,13 +58,16 @@ def login_user():
 #profil user
 @app.route('/login/profil', methods=['POST', 'GET'])
 def profil_user():
+    data = ControlDB()
+    usr = data.select_user(session['username'])
+    follower = data.count_following(usr['id'])
+
     if request.method == 'POST':
         judul = request.form['judul']
         file = request.files['file']
         
         session['bahan'] = judul
 
-        data = ControlDB()
         postingan_check = data.select_postingan_byjudul(judul)
 
         if postingan_check is not None:
@@ -80,7 +83,7 @@ def profil_user():
         data.insert_postingan(tipes)
 
         return redirect(url_for('bahan_masakan'))
-    return render_template('profil.html', username=session['username'])
+    return render_template('profil.html', username=session['username'], follower=follower)
 
 @app.route('/login/profil/bahan', methods=['POST', 'GET'])
 def bahan_masakan():
@@ -126,14 +129,16 @@ def detail_postingan(id):
     data = ControlDB()
     mysql = data.postingan_detail(id)
     like = data.count_like(id)
+    usr = data.select_user(session['username'])
     comment = data.count_comment(id)
     pict = data.pict(id)
     field_comment = data.select_komentar_byid(id)
     for i in range(len(field_comment)):
         today = datetime.now()
         tanggalan = today.date() - field_comment[i]['tgl_comment']
-        return render_template('detail.html', data=mysql, gambar=pict, count_like=like, count_comment=comment, field=field_comment, day=tanggalan.days)
-    return render_template('detail.html', data=mysql, gambar=pict, count_like=like, count_comment=comment, field=field_comment)
+        follow = data.select_following(field_comment[i]['id'])
+        return render_template('detail.html', data=mysql, gambar=pict, count_like=like, count_comment=comment, field=field_comment, day=tanggalan.days, user=usr, follow=follow)
+    return render_template('detail.html', data=mysql, gambar=pict, count_like=like, count_comment=comment, field=field_comment, user=usr)
 
 @app.route('/login/global')
 def global_page():
@@ -141,7 +146,10 @@ def global_page():
     mysql = data.postingan_global()
     usr_check = data.select_user(session['username'])
     likedislike = data.select_penyuka_oneparams(usr_check['id'])
-    return render_template("global.html", data=mysql, penyuka=likedislike)
+    for i in range(len(mysql)):
+        following = data.select_follows(usr_check['id'])
+        return render_template("global.html", data=mysql, penyuka=likedislike, user=usr_check, following=following)
+    return render_template("global.html", data=mysql, penyuka=likedislike, user=usr_check)
 
 @app.route('/logout')
 def logout():
@@ -153,10 +161,11 @@ def penyuka(usrid, postid):
     if request.method == 'POST':
         data = ControlDB()
         tanggal = datetime.now()
-        if data.select_penyuka(usrid, postid) is not None:
+        usr = data.select_user(session['username'])
+        if data.select_penyuka(usr['id'], postid) is not None:
             data.dislike(usrid)
         else:
-            data.menyukai_postingan(usrid, postid, tanggal)
+            data.menyukai_postingan(usr['id'], postid, tanggal)
         return redirect(url_for("global_page"))
 
 @app.route("/login/komentar/<int:usrid>/<int:postid>", methods=['POST', 'GET'])
@@ -164,10 +173,21 @@ def komentar(usrid, postid):
     if request.method == 'POST':
         comment_field = request.form['comment_post']
         data = ControlDB()
+        usr = data.select_user(session['username'])
         tanggal = datetime.now()
-        tipes = (usrid, postid, tanggal, comment_field)
+        tipes = (usr['id'], postid, tanggal, comment_field)
         data.insert_komentar(tipes)
         return redirect(url_for("global_page"))
 
-
-
+@app.route("/login/mengikuti/<int:userid>/<int:followid>", methods=['POST', 'GET'])
+def mengikuti(userid, followid):
+    if request.method == 'POST':
+        data = ControlDB()
+        check = data.select_following(followid)
+        if check is not None:
+            data.hapus_pertemanan(userid, followid)
+        else:
+            tanggal = datetime.now()
+            tipes = (userid, followid, tanggal)
+            data.follow(tipes)
+        return redirect(url_for("global_page"))

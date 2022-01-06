@@ -6,6 +6,15 @@
     <div>
         {% include 'navbar.html' %}
         {% include 'flash.html' %}
+        {% if follower %}
+            <div class="text-center">
+                <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Kamu memiliki {{follower.follower}} pengikut</h5>
+            </div>
+        {% else %}
+            <div class="text-center">
+                <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Kamu memiliki 0 pengikut</h5>
+            </div>
+        {% endif %}
         <div style="display: flex; flex-wrap: wrap; justify-content: center;">
             <div style="margin-top: 10em; flex-basis: 50em;">
                 <form action="{{ url_for('profil_user')}}" method="POST" enctype = "multipart/form-data">
