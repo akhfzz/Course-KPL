@@ -18,6 +18,7 @@ class ControlDB:
             database=self.database
         )
         cursor = db.cursor(pymysql.cursors.DictCursor)
+        
     def close(self):
         global db, cursor
         db.close()
